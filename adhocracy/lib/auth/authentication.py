@@ -67,7 +67,6 @@ class EmailSQLAlchemyAuthenticatorPlugin(_EmailBaseSQLAlchemyPlugin,
             validator = getattr(user, self.translations['validate_password'])
             if validator(identity['password']):
                 return user.user_name
-                #return identity['login']
                 
 class EmailSQLAlchemyUserMDPlugin(_EmailBaseSQLAlchemyPlugin,
           repoze.who.plugins.sa.SQLAlchemyUserMDPlugin):
@@ -100,8 +99,8 @@ def setup_auth(app, config):
             '/post_logout',
             login_counter_name='_login_tries',
             rememberer_name='auth_tkt',
-	        charset='utf-8'
-	)
+            charset='utf-8'
+    )
     
     sqlauth = EmailSQLAlchemyAuthenticatorPlugin(model.User, model.meta.Session)
     sql_user_md = SQLAlchemyUserMDPlugin(model.User, model.meta.Session)
