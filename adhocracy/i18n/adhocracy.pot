@@ -1,13 +1,13 @@
 # Translations template for adhocracy.
-# Copyright (C) 2012 ORGANIZATION
+# Copyright (C) 2013 ORGANIZATION
 # This file is distributed under the same license as the adhocracy project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2012.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2013.
 ##, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: adhocracy 2.0.0-rc.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2012-11-18 10:53+0100\n"
+"POT-Creation-Date: 2013-01-14 13:38+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -91,6 +91,9 @@ msgid "The changes where saved."
 msgstr ""
 
 msgid "No update required."
+msgstr ""
+
+msgid "Instance created successfully. You can now configure it as you like."
 msgstr ""
 
 msgid "Delegations are enabled."
@@ -349,6 +352,9 @@ msgstr ""
 msgid "tutorial_user_index_intro"
 msgstr ""
 
+msgid "Sorry, registration has been disabled by administrator."
+msgstr ""
+
 msgid "Sorry, but we don't accept registrations with this email address."
 msgstr ""
 
@@ -396,7 +402,16 @@ msgstr ""
 msgid "The activation link has been re-sent to your email address."
 msgstr ""
 
+msgid "Invalid login"
+msgstr ""
+
+msgid "Invalid email / user name or password"
+msgstr ""
+
 msgid "Invalid user name or password"
+msgstr ""
+
+msgid "Invalid email or password"
 msgstr ""
 
 msgid "tutorial_dashboard_title"
@@ -491,6 +506,14 @@ msgstr ""
 
 #, python-format
 msgid "No Badge ID '%s' exists"
+msgstr ""
+
+#, python-format
+msgid "Cannot use global category %s in this instance"
+msgstr ""
+
+#, python-format
+msgid "Badge with ID '%s' not valid in this instance"
 msgstr ""
 
 #, python-format
@@ -1135,6 +1158,18 @@ msgstr ""
 msgid "Unfollow"
 msgstr ""
 
+msgid "Send us your feedback"
+msgstr ""
+
+msgid "One line summary"
+msgstr ""
+
+msgid "Submit"
+msgstr ""
+
+msgid "List existing feedback"
+msgstr ""
+
 msgid "code of conduct"
 msgstr ""
 
@@ -1196,6 +1231,9 @@ msgstr ""
 msgid "Logout"
 msgstr ""
 
+msgid "Settings"
+msgstr ""
+
 msgid "Search"
 msgstr ""
 
@@ -1210,9 +1248,6 @@ msgid "Norms"
 msgstr ""
 
 msgid "Members"
-msgstr ""
-
-msgid "Settings"
 msgstr ""
 
 #, python-format
@@ -1377,6 +1412,9 @@ msgstr ""
 msgid "All Events"
 msgstr ""
 
+msgid "Update Search Index"
+msgstr ""
+
 msgid "Site administration"
 msgstr ""
 
@@ -1414,6 +1452,12 @@ msgid "Like '#a4a4a4'"
 msgstr ""
 
 msgid "Preview:"
+msgstr ""
+
+msgid "Check to hide badge in user interface"
+msgstr ""
+
+msgid "visible"
 msgstr ""
 
 msgid "Group"
@@ -1843,6 +1887,12 @@ msgid "Require to propose a variant"
 msgstr ""
 
 msgid "Use milestones"
+msgstr ""
+
+msgid "Hide global categories"
+msgstr ""
+
+msgid "Allow editing of comments by default"
 msgstr ""
 
 msgid "Freeze this instance"
@@ -2371,19 +2421,16 @@ msgstr ""
 msgid "Proposal title"
 msgstr ""
 
-msgid "Proposal goals"
-msgstr ""
-
 msgid "A brief description of <b>the goals</b> of your proposal."
 msgstr ""
 
 msgid "The proposal would..."
 msgstr ""
 
-msgid "Proposal Category"
+msgid "Proposal goals"
 msgstr ""
 
-msgid "Proposal category hint"
+msgid "Proposal Category"
 msgstr ""
 
 msgid "Collaboration and Notification"
@@ -2903,7 +2950,13 @@ msgstr ""
 msgid "If you have an account but you've lost your password, <a href='/reset'>click here</a>."
 msgstr ""
 
+msgid "Email or username:"
+msgstr ""
+
 msgid "Login:"
+msgstr ""
+
+msgid "Email:"
 msgstr ""
 
 msgid "Register new account"
