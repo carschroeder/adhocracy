@@ -50,7 +50,8 @@ class UserCreateForm(formencode.Schema):
 class UserUpdateForm(formencode.Schema):
     allow_extra_fields = True
     display_name = validators.String(not_empty=False)
-    email = validators.Email(not_empty=True)
+    email = formencode.All(validators.Email(not_empty=True),
+                           forms.UniqueEmail())
     locale = validators.String(not_empty=False)
     password_change = validators.String(not_empty=False)
     password_confirm = validators.String(not_empty=False)
