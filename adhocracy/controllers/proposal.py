@@ -42,7 +42,7 @@ class ProposalCreateForm(ProposalNewForm):
     text = validators.String(max=20000, min=4, not_empty=True)
     tags = validators.String(max=20000, not_empty=False, if_missing=None)
     milestone = forms.MaybeMilestone(if_empty=None,
-            if_missing=None)
+                                     if_missing=None)
     page = formencode.foreach.ForEach(PageInclusionForm())
     category = formencode.foreach.ForEach(forms.ValidCategoryBadge())
 
@@ -57,7 +57,7 @@ class ProposalUpdateForm(ProposalEditForm):
     wiki = validators.StringBool(not_empty=False, if_empty=False,
                                  if_missing=False)
     milestone = forms.MaybeMilestone(if_empty=None,
-            if_missing=None)
+                                     if_missing=None)
     category = formencode.foreach.ForEach(forms.ValidCategoryBadge())
 
 
@@ -88,8 +88,12 @@ class ProposalController(BaseController):
 
         # FIXME: Add tag filtering again (now solr based)
         # FIXME: Live filtering ignores selected facets.
+        def_sort = None
+        if c.user and c.user.proposal_sort_order:
+            def_sort = c.user.proposal_sort_order
         c.proposals_pager = pager.solr_proposal_pager(c.instance,
-                                                      {'text': query})
+                                                      {'text': query},
+                                                      default_sorting=def_sort)
 
         if format == 'json':
             return render_json(c.proposals_pager)
@@ -173,7 +177,7 @@ class ProposalController(BaseController):
             var_val = forms.VariantName()
             variant = var_val.to_python(self.form_result.get('label'))
             if not can.norm.edit(page, variant) or \
-                not can.selection.create(proposal):
+                    not can.selection.create(proposal):
                 continue
             model.Text.create(page, variant, c.user,
                               page.head.title,
@@ -284,6 +288,7 @@ class ProposalController(BaseController):
         c.disable_include = len(available_pages) == 0
         c.history_url = h.entity_url(c.proposal.description.head,
                                      member='history')
+        c.category = c.proposal.category
         self._common_metadata(c.proposal)
         c.tutorial_intro = _('tutorial_proposal_show_tab')
         c.tutorial = 'proposal_show'
@@ -332,7 +337,7 @@ class ProposalController(BaseController):
                 events, _("Proposal: %s") % c.proposal.title,
                 h.entity_url(c.proposal),
                 description=_("Activity on the %s proposal") % c.proposal.title
-                )
+            )
 
         events = model.Event.find_by_topic(c.proposal)
         c.tile = tiles.proposal.ProposalTile(c.proposal)

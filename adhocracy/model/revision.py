@@ -8,14 +8,15 @@ import meta
 
 log = logging.getLogger(__name__)
 
-revision_table = Table('revision', meta.data,
+revision_table = Table(
+    'revision', meta.data,
     Column('id', Integer, primary_key=True),
     Column('create_time', DateTime, default=datetime.utcnow),
     Column('text', UnicodeText(), nullable=False),
     Column('sentiment', Integer, default=0),
     Column('user_id', Integer, ForeignKey('user.id'), nullable=False),
     Column('comment_id', Integer, ForeignKey('comment.id'), nullable=False),
-    )
+)
 
 
 class Revision(object):
@@ -32,6 +33,10 @@ class Revision(object):
     @property
     def is_latest(self):
         return self.comment.latest.id == self.id
+
+    @property
+    def is_only(self):
+        return len(self.comment.revisions) == 1
 
     @property
     def previous(self):

@@ -15,7 +15,7 @@ from adhocracy.lib import search
 class AdhocracyCommand(Command):
     parser = Command.standard_parser(verbose=True)
     parser.add_option('-c', '--config', dest='config',
-            default='development.ini', help='Config file to use.')
+                      default='development.ini', help='Config file to use.')
     default_verbosity = 1
     group_name = 'adhocracy'
 
@@ -200,7 +200,7 @@ class Index(AdhocracyCommand):
         indexed_classes = sorted(self.indexed_classes.keys())
         content_types = '\n          '.join(indexed_classes)
         usage += (
-            'index (ALL|DROP) [<entity>, ...] [-I <instance>, ...]'
+            'index (INDEX|DROP|DROP_ALL|ALL) [<entity>, ...] [-I <instance>, ...]'
             ' -c <inifile>'
             '\n\n'
             '  DROP_ALL:\n'

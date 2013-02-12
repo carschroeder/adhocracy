@@ -8,7 +8,6 @@ from paste.deploy.converters import asbool
 from pylons import tmpl_context as c
 from pylons.error import handle_mako_error
 from pylons.configuration import PylonsConfig
-import sqlalchemy
 from sqlalchemy import engine_from_config
 from sqlalchemy.interfaces import ConnectionProxy
 
@@ -61,11 +60,6 @@ def load_environment(global_conf, app_conf, with_db=True):
     if asbool(config.get('adhocracy.debug.sql', False)):
         engineOpts['connectionproxy'] = TimerProxy()
 
-    # Work around a bug in sqlite and sqlalchemy<0.7
-    # See https://github.com/Pylons/pyramid/issues/174
-    if tuple(map(int, sqlalchemy.__version__.split('.'))) < (0,7,0) and config['sqlalchemy.url'].startswith('sqlite:'):
-        engineOpts['poolclass'] = sqlalchemy.pool.NullPool
-
     engine = engine_from_config(config, 'sqlalchemy.', **engineOpts)
     init_model(engine)
 
@@ -100,10 +94,10 @@ class TimerProxy(ConnectionProxy):
             # contains proxy stuff
             caller = '(unknown)'
             for frame_file, frame_line, frame_func, frame_code in \
-                reversed(traceback.extract_stack()):
+                    reversed(traceback.extract_stack()):
 
                 if __file__.startswith(frame_file) \
-                    or '/sqlalchemy/' in frame_file:
+                        or '/sqlalchemy/' in frame_file:
 
                     continue
 

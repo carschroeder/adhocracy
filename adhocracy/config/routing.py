@@ -50,8 +50,8 @@ def make_map(config):
                                          'reset': 'GET',
                                          'activate': 'GET',
                                          'resend': 'GET'},
-                                collection={'complete': 'GET',
-                                            'filter': 'GET'})
+                 collection={'complete': 'GET',
+                             'filter': 'GET'})
 
     # TODO work this into a complete subcontroller.
     map.connect('/user/{id}/message.{format}', controller='message',
@@ -93,7 +93,7 @@ def make_map(config):
                                                  'badges': 'GET',
                                                  'update_badges': 'POST',
                                                  'history': 'GET'},
-                               collection={'filter': 'GET'})
+                 collection={'filter': 'GET'})
     map.connect('/proposal/{proposal_id}/{selection_id}/details{.format}',
                 controller='selection',
                 action='details')
@@ -127,6 +127,13 @@ def make_map(config):
     map.connect('/page/{id}/{variant}/purge',
                 controller='page',
                 action='purge',
+                conditions=dict(method=['POST', 'DELETE']))
+    map.connect('/page/{id};{text}/ask_purge_history',
+                controller='page', action='ask_purge_history',
+                conditions=dict(method=['GET']))
+    map.connect('/page/{id};{text}/purge_history',
+                controller='page',
+                action='purge_history',
                 conditions=dict(method=['POST', 'DELETE']))
     map.connect('/page/{id}/{variant}/edit.{format}',
                 controller='page',
@@ -172,6 +179,7 @@ def make_map(config):
 
     map.resource('comment', 'comment', member={'history': 'GET',
                                                'revert': 'GET',
+                                               'purge_history': 'GET',
                                                'ask_delete': 'GET'})
 
     map.connect('/comment/form/edit/{id}', controller='comment',
@@ -211,9 +219,9 @@ def make_map(config):
     # not using REST since tags may contain dots, thus failing format
     # detection.
     map.connect('/tag', controller='tag', action='index',
-                        conditions=dict(method=['GET']))
+                conditions=dict(method=['GET']))
     map.connect('/tag', controller='tag', action='create',
-                        conditions=dict(method=['POST']))
+                conditions=dict(method=['POST']))
     map.connect('/tag/autocomplete', controller='tag', action='autocomplete')
     map.connect('/untag', controller='tag', action='untag')
     map.connect('/untag_all', controller='tag', action='untag_all')
@@ -305,6 +313,14 @@ def make_map(config):
                 action="user_import", conditions=dict(method=['POST']))
     map.connect('/admin/users/import', controller='admin',
                 action="user_import_form", conditions=dict(method=['GET']))
+    map.connect('/admin/export',
+                controller='admin', action='export_dialog')
+    map.connect('/admin/export/do',
+                controller='admin', action='export_do')
+    map.connect('/admin/import',
+                controller='admin', action='import_dialog')
+    map.connect('/admin/import/do',
+                controller='admin', action='import_do')
 
     map.connect('/static/{page_name}.{format}', controller='static',
                 action='serve')

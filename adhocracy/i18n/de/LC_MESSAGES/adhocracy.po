@@ -1,5 +1,5 @@
 # Translations template for adhocracy.
-# Copyright (C) 2012 ORGANIZATION
+# Copyright (C) 2013 ORGANIZATION
 # This file is distributed under the same license as the adhocracy project.
 # Translators:
 # Daniel Reichert <daniel.reichert@liqd.de>, 2012.
@@ -13,9 +13,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Adhocracy\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-01-14 13:38+0100\n"
-"PO-Revision-Date: 2013-01-14 14:37+0100\n"
-"Last-Translator: \n"
+"POT-Creation-Date: 2013-02-06 00:59+0100\n"
+"PO-Revision-Date: 2013-02-06 00:00+0000\n"
+"Last-Translator: Nicolas Dietrich <nicodietrich@gmail.com>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/adhocracy/language/de/)\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -65,6 +65,14 @@ msgstr "Sie versuchen eine Version wiederherzustellen, die nicht Teil der Histor
 
 msgid "The comment has been reverted."
 msgstr "Dieser Kommentar wurde zurück gesetzt."
+
+msgid ""
+"You're trying to purge a revision which is not part of this comment's "
+"history"
+msgstr ""
+
+msgid "The comment revision has been deleted."
+msgstr ""
 
 msgid "Wrong topic"
 msgstr "Falsches Thema"
@@ -288,6 +296,12 @@ msgstr "Texte von unterschiedlichen Beschlüssen können nicht verglichen werden
 #, python-format
 msgid "The variant %s has been deleted."
 msgstr "Die Version %s wurde gelöscht."
+
+msgid "Cannot delete, if there's only one version"
+msgstr ""
+
+msgid "The selected version has been deleted."
+msgstr ""
 
 #, python-format
 msgid "The page %s has been deleted."
@@ -777,17 +791,23 @@ msgstr "gemischt"
 msgid "Age and Support"
 msgstr "Alter und Unterstützung"
 
-msgid "Support"
-msgstr "Unterstützung"
+msgid "Rating"
+msgstr ""
 
 msgid "Date"
 msgstr "Datum"
 
-msgid "Newest Proposals"
-msgstr "Neueste Vorschläge"
+msgid "User behavior"
+msgstr ""
 
 msgid "Other"
 msgstr "Sonstige"
+
+msgid "Support"
+msgstr "Unterstützung"
+
+msgid "Newest Proposals"
+msgstr "Neueste Vorschläge"
 
 #, python-format
 msgid "Missing page: %s"
@@ -1347,13 +1367,119 @@ msgstr "Diese Seite melden..."
 msgid "Send"
 msgstr "Senden"
 
-msgid "Admin: Import Users"
-msgstr "Admin: Benutzer importieren"
+msgid "Export"
+msgstr ""
+
+msgid "Export users"
+msgstr ""
+
+msgid "Include personal data"
+msgstr ""
+
+msgid "Include password hashes"
+msgstr ""
+
+msgid "Export badges"
+msgstr ""
+
+msgid "Export content (instances)"
+msgstr ""
+
+msgid "Include proposals"
+msgstr ""
+
+msgid "Include comments"
+msgstr ""
+
+msgid "Export format:"
+msgstr ""
+
+msgid "JSON download"
+msgstr ""
+
+msgid "JSON"
+msgstr ""
+
+msgid "ZIP download"
+msgstr ""
+
+msgid "Export Now"
+msgstr ""
+
+msgid "Import"
+msgstr ""
+
+msgid "Import users"
+msgstr ""
+
+msgid "Import badges"
+msgstr ""
+
+msgid "Import content (instances)"
+msgstr ""
+
+msgid "Replacement strategy"
+msgstr ""
+
+msgid "Update duplicate entries"
+msgstr ""
+
+msgid "Skip duplicate entries"
+msgstr ""
+
+msgid "File to import:"
+msgstr ""
+
+msgid "Detect"
+msgstr ""
+
+msgid "ZIP"
+msgstr ""
+
+msgid "Import Now"
+msgstr ""
+
+msgid "Import successfully performed."
+msgstr ""
+
+msgid "back to main page"
+msgstr ""
+
+msgid "Admin: Group Permissions"
+msgstr "Verwaltung: Gruppenrechte"
+
+msgid "Admin &raquo; Group Permissions"
+msgstr "Verwaltung &raquo; Gruppenrechte"
+
+msgid "Group Permissions"
+msgstr "Gruppenrechte"
+
+msgid ""
+"WARNING: This allows you to shut yourself out of your adhocracy. Handle with"
+" care!"
+msgstr "ACHTUNG: Hiermit können Sie sich aus Ihrer eigenen Gruppe ausschließen. Seien Sie vorsichtig!"
+
+msgid "Permissions"
+msgstr "Rechte"
+
+msgid "All Events"
+msgstr "Alle Ereignisse"
 
 msgid "Import Users"
 msgstr "Benutzer importieren"
 
-msgid "Paste the content of a CSV file, e.g. exported from Excel, with the 3 columns username, display name and email"
+msgid "Update Search Index"
+msgstr ""
+
+msgid "Site administration"
+msgstr "Seiteneinstellungen"
+
+msgid "Admin: Import Users"
+msgstr "Admin: Benutzer importieren"
+
+msgid ""
+"Paste the content of a CSV file, e.g. exported from Excel, with the 3 "
+"columns username, display name and email"
 msgstr "Fügen Sie den Inhalt einer CSV- Datei ein, z.B. exportiert aus Excel, mit den 3 Spalten Benutzername, Anzeigename und E-Mail "
 
 msgid "Users CSV"
@@ -1584,6 +1710,9 @@ msgstr "%s angelegt"
 
 msgid "revert here"
 msgstr "diese Version wiederherstellen"
+
+msgid "delete version permanently"
+msgstr ""
 
 #, python-format
 msgid "on %s"
@@ -2168,6 +2297,9 @@ msgstr "Sind Sie sicher, dass Sie den Vorschlag %s entfernen möchten?"
 msgid "WARNING: This will remove all revisions of the variant from any proposals that might support it."
 msgstr "ACHTUNG: Dieser Schritt entfernt alle Überarbeitungen dieser Version von allen Vorschlägen, die diese unterstützen."
 
+msgid "Are you sure you want to purge the following version:"
+msgstr ""
+
 #, python-format
 msgid "Variant: %s"
 msgstr "Version: %s"
@@ -2196,6 +2328,12 @@ msgstr "Name der Version"
 
 msgid "Text"
 msgstr "Text"
+
+msgid "Formatting"
+msgstr ""
+
+msgid "Use markdown formatting."
+msgstr ""
 
 msgid "Parent page:"
 msgstr "Elternseite:"
@@ -2259,6 +2397,9 @@ msgstr "Informationen über den Beschluss"
 
 msgid "Last Activity"
 msgstr "Letzte Aktivität"
+
+msgid "This page is not assigned to any category"
+msgstr ""
 
 #, python-format
 msgid "This norm relates to the milestone %s."
@@ -2550,6 +2691,9 @@ msgstr "... und neue Kommentare einbringen."
 
 msgid "tutorial_proposal_show_propose_variant"
 msgstr "Oder aktiv den Vorschlag mitgestalten und Alternativen einbringen."
+
+msgid "This proposal is not assigned to any category"
+msgstr ""
 
 #, python-format
 msgid "This proposal relates to the deleted milestone %s."
@@ -2887,6 +3031,21 @@ msgstr "Passwort:"
 msgid "Password (confirm):"
 msgstr "Passwort (bestätigen):"
 
+msgid "Gender"
+msgstr ""
+
+msgid "Select your gender"
+msgstr ""
+
+msgid "Unspecified"
+msgstr ""
+
+msgid "Male"
+msgstr ""
+
+msgid "Female"
+msgstr ""
+
 msgid "Notifications"
 msgstr "Benachrichtungen"
 
@@ -2940,6 +3099,9 @@ msgstr "Hilfenachrichten und Links zur Dokumentation abstellen."
 
 msgid "Hide help messages:"
 msgstr "Hinweise verbergen:"
+
+msgid "Change default sorting order for proposals:"
+msgstr ""
 
 msgid "Find users"
 msgstr "Benutzer suchen"

@@ -56,7 +56,7 @@ def user_language(user, fallbacks=[]):
     if locale is None:
         locales = map(str, LOCALES)
         locale = Locale.parse(Locale.negotiate(fallbacks, locales)) \
-                 or get_default_locale()
+            or get_default_locale()
 
     # determinate from which path we load the translations
     translations_module = config.get('adhocracy.translations', 'adhocracy')
@@ -122,5 +122,6 @@ def format_time(dt):
 def relative_time(dt):
     """ A short statement giving the time distance since ``dt``. """
     fmt = "<time class='ts' datetime='%(iso)sZ'>%(formatted)s</time>"
+    dt = dt.replace(microsecond=0)
     formatted = "%s %s" % (format_date(dt), format_time(dt))
     return fmt % dict(iso=dt.isoformat(), formatted=formatted)

@@ -18,7 +18,8 @@ from adhocracy.model.instance import Instance
 log = logging.getLogger(__name__)
 
 
-user_table = Table('user', meta.data,
+user_table = Table(
+    'user', meta.data,
     Column('id', Integer, primary_key=True),
     Column('user_name', Unicode(255), nullable=False, unique=True, index=True),
     Column('display_name', Unicode(255), nullable=True, index=True),
@@ -35,8 +36,10 @@ user_table = Table('user', meta.data,
     Column('delete_time', DateTime),
     Column('banned', Boolean, default=False),
     Column('no_help', Boolean, default=False, nullable=True),
-    Column('page_size', Integer, default=10, nullable=True)
-    )
+    Column('page_size', Integer, default=10, nullable=True),
+    Column('proposal_sort_order', Unicode(50), default=None, nullable=True),
+    Column('gender', Unicode(1), default=None),
+)
 
 
 class User(meta.Indexable):
@@ -99,14 +102,15 @@ class User(meta.Indexable):
         current_instance = ifilter.get_instance()
 
         memberships_q = meta.Session.query(Membership).filter(
-            Membership.user_id==self.id)
+            Membership.user_id == self.id)
 
         if current_instance == None:
-            memberships_q = memberships_q.filter(Membership.instance_id==None)
+            memberships_q = memberships_q.filter(
+                Membership.instance_id == None)
         else:
             memberships_q = memberships_q.filter(or_(
-                Membership.instance_id==None,
-                Membership.instance_id==current_instance.id
+                Membership.instance_id == None,
+                Membership.instance_id == current_instance.id
             ))
 
         memberships = memberships_q.all()
@@ -129,9 +133,9 @@ class User(meta.Indexable):
 
         from membership import Membership
         memberships = meta.Session.query(Membership).filter(
-            Membership.user_id==self.id,
-            Membership.instance_id==instance.id)\
-                .all()
+            Membership.user_id == self.id,
+            Membership.instance_id == instance.id)\
+            .all()
         for membership in memberships:
             if not membership.is_expired():
                 return membership
@@ -145,7 +149,7 @@ class User(meta.Indexable):
         instances = []
         for membership in self.memberships:
             if (not membership.is_expired()) and \
-                (membership.instance is not None):
+                    (membership.instance is not None):
                 instances.append(membership.instance)
         return list(set(instances))
 
@@ -458,7 +462,7 @@ class User(meta.Indexable):
             tag=[self.user_name],
             body=self.bio,
             user=self.user_name,
-            ))
+        ))
         return index
 
     def __repr__(self):

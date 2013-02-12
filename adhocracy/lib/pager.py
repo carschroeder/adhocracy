@@ -15,7 +15,7 @@ from webob.multidict import MultiDict
 from adhocracy import model
 from adhocracy.lib import sorting, tiles
 from adhocracy.lib.helpers import base_url
-from adhocracy.lib.event.stats import user_activity
+from adhocracy.lib.event.stats import user_activity, user_rating
 from adhocracy.lib.search.query import sunburnt_query, add_wildcard_query
 from adhocracy.lib.templating import render_def
 from adhocracy.lib.util import generate_sequence
@@ -597,13 +597,7 @@ class SolrFacet(SolrIndexer):
         Build an url from the *request* and the *facet_value*
         '''
         params = self.build_params(request, facet_values)
-        url_base = url.current(qualified=True)
-        protocol = config.get('adhocracy.protocol', 'http').strip()
-        if ', ' in url_base:
-            # hard coded fix for enquetebeteiligung.de
-            url_base = '%s://%s' % (protocol, url_base.split(', ')[1])
-        else:
-            url_base = '%s://%s' % (protocol, url_base.split('://')[1])
+        url_base = base_url(url.current(qualified=False))
         return url_base + "?" + urllib.urlencode(params)
 
     def build_params(self, request, facet_values):
@@ -694,7 +688,7 @@ class DelegateableBadgeCategoryFacet(SolrFacet):
     entity_type = model.Badge
     title = lazy_ugettext(u'Categories')
     solr_field = 'facet.delegateable.badgecategory'
-    
+
     @property
     def show_current_empty(self):
         return not asbool(config.get(
@@ -816,7 +810,7 @@ class NormNumSelectionsIndexer(SolrIndexer):
     @classmethod
     def add_data_to_index(cls, entity, data):
         if (isinstance(entity, model.Page) and
-            entity.function == model.Page.NORM):
+                entity.function == model.Page.NORM):
             data[cls.solr_field] = len(entity.selections)
 
 
@@ -827,7 +821,7 @@ class NormNumVariantsIndexer(SolrIndexer):
     @classmethod
     def add_data_to_index(cls, entity, data):
         if (isinstance(entity, model.Page) and
-            entity.function == model.Page.NORM):
+                entity.function == model.Page.NORM):
             data[cls.solr_field] = len(entity.selections)
 
 
@@ -925,6 +919,26 @@ class InstanceUserActivityIndexer(SolrIndexer):
                 data[cls.solr_field(instance)] = activity
                 activity_sum = activity_sum + activity
             data[cls.solr_field()] = activity_sum
+
+
+class InstanceUserRatingIndexer(SolrIndexer):
+
+    @classmethod
+    def solr_field(cls, instance=None):
+        field = 'order.user.rating'
+        if instance is not None:
+            field = field + '.%s' % instance.key
+        return field
+
+    @classmethod
+    def add_data_to_index(cls, entity, data):
+        if isinstance(entity, model.User):
+            rating_sum = 0
+            for instance in entity.instances:
+                rating = user_rating(instance, entity)
+                data[cls.solr_field(instance)] = rating
+                rating_sum = rating_sum + rating
+            data[cls.solr_field()] = rating_sum
 
 
 class SolrPager(PagerMixin):
@@ -1103,6 +1117,11 @@ class NamedSort(object):
         else:
             return self.by_group[self.groups[0]][0]
 
+    @default.setter
+    def default(self, default):
+        assert default in self.by_value
+        self._default = default
+
     def current_value(self):
         return request.params.get(self.pager.sort_param)
 
@@ -1160,12 +1179,28 @@ PROPOSAL_NO_VOTES = SortOption('-order.proposal.novotes', L_("Most Nays"))
 PROPOSAL_MIXED = SortOption('-order.proposal.mixed', L_('Mixed'),
                             description=L_('Age and Support'))
 
-USER_SORTS = NamedSort([[None, (OLDEST(old=1),
-                                NEWEST(old=2),
-                                ACTIVITY(old=3),
-                                ALPHA(old=4))]],
-                       default=ACTIVITY,
-                       mako_def="sort_dropdown")
+
+def get_user_sorts(instance=None, default='ACTIVITY'):
+    activity = SortOption(
+        '-%s' % InstanceUserActivityIndexer.solr_field(instance),
+        L_('Activity'))
+
+    rating = SortOption(
+        '-%s' % InstanceUserRatingIndexer.solr_field(instance),
+        L_('Rating'))
+    sorts = {"OLDEST": OLDEST,
+             "NEWEST": NEWEST,
+             "ACTIVITY": activity,
+             "RATING": rating,
+             "ALPHA": ALPHA}
+
+    return NamedSort([[L_('Date'), (OLDEST(old=1),
+                                    NEWEST(old=2))],
+                      [L_('User behavior'), (activity(old=3),
+                                             rating(old=4))],
+                      [L_('Other'), (ALPHA(old=5),)]],
+                     default=sorts.get(default, 'ACTIVITY'),
+                     mako_def="sort_slidedown")
 
 
 INSTANCE_SORTS = NamedSort([[None, (OLDEST(old=1),
@@ -1189,20 +1224,20 @@ PROPOSAL_SORTS = NamedSort([[L_('Support'), (PROPOSAL_SUPPORT(old=2),
                            mako_def="sort_slidedown")
 
 
-def solr_instance_users_pager(instance):
+def solr_instance_users_pager(instance, default_sorting='ACTIVITY'):
     extra_filter = {'facet.instances': instance.key}
     pager = SolrPager('users', tiles.user.row,
                       entity_type=model.User,
-                      sorts=USER_SORTS,
+                      sorts=get_user_sorts(instance, default_sorting),
                       extra_filter=extra_filter,
                       facets=[UserBadgeFacet])
     return pager
 
 
-def solr_global_users_pager():
+def solr_global_users_pager(default_sorting='ACTIVITY'):
     pager = SolrPager('users', tiles.user.row,
                       entity_type=model.User,
-                      sorts=USER_SORTS,
+                      sorts=get_user_sorts(None, default_sorting),
                       facets=[UserBadgeFacet, InstanceFacet]
                       )
     return pager
@@ -1228,11 +1263,16 @@ def solr_instance_pager():
     return pager
 
 
-def solr_proposal_pager(instance, wildcard_queries=None):
+def solr_proposal_pager(instance, wildcard_queries=None, default_sorting=None):
     extra_filter = {'instance': instance.key}
+    sorts = PROPOSAL_SORTS
+    if default_sorting is not None:
+        sorts = copy.copy(sorts)
+        sorts.default = default_sorting
+
     pager = SolrPager('proposals', tiles.proposal.row,
                       entity_type=model.Proposal,
-                      sorts=PROPOSAL_SORTS,
+                      sorts=sorts,
                       extra_filter=extra_filter,
                       facets=[DelegateableBadgeCategoryFacet,
                               DelegateableMilestoneFacet,

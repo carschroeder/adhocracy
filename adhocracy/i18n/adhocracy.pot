@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: adhocracy 2.0.0-rc.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-01-14 13:38+0100\n"
+"POT-Creation-Date: 2013-02-06 01:46+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,10 +52,16 @@ msgstr ""
 msgid "The comment has been deleted."
 msgstr ""
 
-msgid "You're trying to revert to a revision which is not partri of this comments history"
+msgid "You're trying to revert to a revision which is not part of this comment's history"
 msgstr ""
 
 msgid "The comment has been reverted."
+msgstr ""
+
+msgid "You're trying to purge a revision which is not part of this comment's history"
+msgstr ""
+
+msgid "The comment revision has been deleted."
 msgstr ""
 
 msgid "Wrong topic"
@@ -279,6 +285,12 @@ msgstr ""
 
 #, python-format
 msgid "The variant %s has been deleted."
+msgstr ""
+
+msgid "Cannot delete, if there's only one version"
+msgstr ""
+
+msgid "The selected version has been deleted."
 msgstr ""
 
 #, python-format
@@ -763,16 +775,22 @@ msgstr ""
 msgid "Age and Support"
 msgstr ""
 
-msgid "Support"
+msgid "Rating"
 msgstr ""
 
 msgid "Date"
 msgstr ""
 
-msgid "Newest Proposals"
+msgid "User behavior"
 msgstr ""
 
 msgid "Other"
+msgstr ""
+
+msgid "Support"
+msgstr ""
+
+msgid "Newest Proposals"
 msgstr ""
 
 #, python-format
@@ -1330,10 +1348,112 @@ msgstr ""
 msgid "Send"
 msgstr ""
 
-msgid "Admin: Import Users"
+msgid "Export"
+msgstr ""
+
+msgid "Export users"
+msgstr ""
+
+msgid "Include personal data"
+msgstr ""
+
+msgid "Include password hashes"
+msgstr ""
+
+msgid "Export badges"
+msgstr ""
+
+msgid "Export content (instances)"
+msgstr ""
+
+msgid "Include proposals"
+msgstr ""
+
+msgid "Include comments"
+msgstr ""
+
+msgid "Export format:"
+msgstr ""
+
+msgid "JSON download"
+msgstr ""
+
+msgid "JSON"
+msgstr ""
+
+msgid "ZIP download"
+msgstr ""
+
+msgid "Export Now"
+msgstr ""
+
+msgid "Import"
+msgstr ""
+
+msgid "Import users"
+msgstr ""
+
+msgid "Import badges"
+msgstr ""
+
+msgid "Import content (instances)"
+msgstr ""
+
+msgid "Replacement strategy"
+msgstr ""
+
+msgid "Update duplicate entries"
+msgstr ""
+
+msgid "Skip duplicate entries"
+msgstr ""
+
+msgid "File to import:"
+msgstr ""
+
+msgid "Detect"
+msgstr ""
+
+msgid "ZIP"
+msgstr ""
+
+msgid "Import Now"
+msgstr ""
+
+msgid "Import successfully performed."
+msgstr ""
+
+msgid "back to main page"
+msgstr ""
+
+msgid "Admin: Group Permissions"
+msgstr ""
+
+msgid "Admin &raquo; Group Permissions"
+msgstr ""
+
+msgid "Group Permissions"
+msgstr ""
+
+msgid "WARNING: This allows you to shut yourself out of your adhocracy. Handle with care!"
+msgstr ""
+
+msgid "Permissions"
+msgstr ""
+
+msgid "All Events"
 msgstr ""
 
 msgid "Import Users"
+msgstr ""
+
+msgid "Update Search Index"
+msgstr ""
+
+msgid "Site administration"
+msgstr ""
+
+msgid "Admin: Import Users"
 msgstr ""
 
 msgid "Paste the content of a CSV file, e.g. exported from Excel, with the 3 columns username, display name and email"
@@ -1392,30 +1512,6 @@ msgid "These users could not be created:"
 msgstr ""
 
 msgid "These users where created, but we could not send out mails:"
-msgstr ""
-
-msgid "Admin: Group Permissions"
-msgstr ""
-
-msgid "Admin &raquo; Group Permissions"
-msgstr ""
-
-msgid "Group Permissions"
-msgstr ""
-
-msgid "WARNING: This allows you to shut yourself out of your adhocracy. Handle with care!"
-msgstr ""
-
-msgid "Permissions"
-msgstr ""
-
-msgid "All Events"
-msgstr ""
-
-msgid "Update Search Index"
-msgstr ""
-
-msgid "Site administration"
 msgstr ""
 
 msgid "Add instance badge"
@@ -1566,6 +1662,9 @@ msgid "created %s"
 msgstr ""
 
 msgid "revert here"
+msgstr ""
+
+msgid "delete version permanently"
 msgstr ""
 
 #, python-format
@@ -2151,6 +2250,9 @@ msgstr ""
 msgid "WARNING: This will remove all revisions of the variant from any proposals that might support it."
 msgstr ""
 
+msgid "Are you sure you want to purge the following version:"
+msgstr ""
+
 #, python-format
 msgid "Variant: %s"
 msgstr ""
@@ -2241,6 +2343,9 @@ msgid "Information about the norm"
 msgstr ""
 
 msgid "Last Activity"
+msgstr ""
+
+msgid "This page is not assigned to any category"
 msgstr ""
 
 #, python-format
@@ -2532,6 +2637,9 @@ msgid "tutorial_proposal_show_new_discussion"
 msgstr ""
 
 msgid "tutorial_proposal_show_propose_variant"
+msgstr ""
+
+msgid "This proposal is not assigned to any category"
 msgstr ""
 
 #, python-format
@@ -2870,6 +2978,21 @@ msgstr ""
 msgid "Password (confirm):"
 msgstr ""
 
+msgid "Gender"
+msgstr ""
+
+msgid "Select your gender"
+msgstr ""
+
+msgid "Unspecified"
+msgstr ""
+
+msgid "Male"
+msgstr ""
+
+msgid "Female"
+msgstr ""
+
 msgid "Notifications"
 msgstr ""
 
@@ -2922,6 +3045,9 @@ msgid "Disable help messages and links to the documentation."
 msgstr ""
 
 msgid "Hide help messages:"
+msgstr ""
+
+msgid "Change default sorting order for proposals:"
 msgstr ""
 
 msgid "Find users"
