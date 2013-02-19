@@ -28,6 +28,7 @@ from adhocracy.lib.pager import (NamedPager, solr_global_users_pager,
                                  solr_instance_users_pager, PROPOSAL_SORTS)
 from adhocracy.lib.queue import post_update
 from adhocracy.lib.templating import render, render_json, ret_abort
+from adhocracy.lib.templating import ret_success
 from adhocracy.lib.util import get_entity_or_abort, random_token
 
 from paste.deploy.converters import asbool
@@ -40,7 +41,7 @@ class UserCreateForm(formencode.Schema):
     user_name = formencode.All(validators.PlainText(not_empty=True),
                                forms.UniqueUsername(),
                                forms.ContainsChar())
-    email = formencode.All(validators.Email(),
+    email = formencode.All(validators.Email(not_empty=True),
                            forms.UniqueEmail())
     password = validators.String(not_empty=True)
     password_confirm = validators.String(not_empty=True)
@@ -53,7 +54,7 @@ class UserUpdateForm(formencode.Schema):
     allow_extra_fields = True
     display_name = validators.String(not_empty=False)
     email = formencode.All(validators.Email(not_empty=True),
-                           forms.UniqueEmail())
+                           forms.UniqueOtherEmail())
     locale = validators.String(not_empty=False)
     password_change = validators.String(not_empty=False)
     password_confirm = validators.String(not_empty=False)
@@ -172,7 +173,7 @@ class UserController(BaseController):
 
         #create user
         user = model.User.create(self.form_result.get("user_name"),
-                                 self.form_result.get("email").lower(),
+                                 self.form_result.get("email"),
                                  password=self.form_result.get("password"),
                                  locale=c.locale)
         model.meta.Session.commit()
@@ -202,7 +203,13 @@ class UserController(BaseController):
             # redirect to dashboard with login message
             session['logged_in'] = True
             session.save()
-            location = h.base_url('/user/%s/dashboard' % login)
+            came_from = session.get('came_from', None)
+            if came_from is not None:
+                del session['came_from']
+                session.save()
+                location = came_from
+            else:
+                location = h.base_url('/user/%s/dashboard' % login)
             raise HTTPFound(location=location, headers=headers)
         else:
             raise Exception('We have added the user to the Database '
@@ -241,8 +248,10 @@ class UserController(BaseController):
         get_gender = self.form_result.get("gender")
         if get_gender in ('f', 'm', 'u'):
             c.page_user.gender = get_gender
-        email = self.form_result.get("email").lower()
-        email_changed = email != c.page_user.email
+        email = self.form_result.get("email")
+        old_email = c.page_user.email
+        old_activated = c.page_user.is_email_activated()
+        email_changed = email != old_email
         c.page_user.email = email
         c.page_user.email_priority = self.form_result.get("email_priority")
         #if c.page_user.twitter:
@@ -255,6 +264,12 @@ class UserController(BaseController):
         model.meta.Session.add(c.page_user)
         model.meta.Session.commit()
         if email_changed:
+            # Logging email address changes in order to ensure accountability
+            log.info('User %s changed email address from %s%s to %s' % (
+                c.page_user.user_name,
+                old_email,
+                ' (validated)' if old_activated else '',
+                email))
             libmail.send_activation_link(c.page_user)
 
         if c.page_user == c.user:
@@ -356,9 +371,11 @@ class UserController(BaseController):
                                           instance_filter=False)
         require.user.edit(c.page_user)
         libmail.send_activation_link(c.page_user)
-        h.flash(_("The activation link has been re-sent to your email "
-                  "address."), 'notice')
-        redirect(h.entity_url(c.page_user, member='edit'))
+        path = request.params.get('came_from', None)
+        ret_success(
+            message=_("The activation link has been re-sent to your email "
+                      "address."), category='success',
+            entity=c.page_user, member='edit', force_path=path)
 
     def show(self, id, format='html'):
         if c.instance is None:
@@ -402,6 +419,11 @@ class UserController(BaseController):
         if c.user:
             session['logged_in'] = True
             session.save()
+            came_from = session.get('came_from', None)
+            if came_from is not None:
+                del session['came_from']
+                session.save()
+                redirect(came_from)
             # redirect to the dashboard inside the instance exceptionally
             # to be able to link to proposals and norms in the welcome
             # message.

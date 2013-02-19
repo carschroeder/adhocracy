@@ -8,7 +8,7 @@ from formencode import validators
 
 from paste.deploy.converters import asbool, asint
 
-from pylons import request, response, tmpl_context as c, config
+from pylons import request, response, tmpl_context as c, config, session
 from pylons.controllers.util import abort, redirect
 from pylons.decorators import validate
 from pylons.i18n import _, lazy_ugettext as L_
@@ -98,6 +98,9 @@ class InstanceGeneralEditForm(formencode.Schema):
     default_group = forms.ValidInstanceGroup(not_empty=True)
     hidden = validators.StringBool(not_empty=False, if_empty=False,
                                    if_missing=False)
+    require_valid_email = validators.StringBool(not_empty=False,
+                                                if_empty=False,
+                                                if_missing=False)
     is_authenticated = validators.StringBool(not_empty=False, if_empty=False,
                                              if_missing=False)
 
@@ -477,6 +480,7 @@ class InstanceController(BaseController):
                 'hidden': c.page_instance.hidden,
                 'locale': c.page_instance.locale,
                 'is_authenticated': c.page_instance.is_authenticated,
+                'require_valid_email': c.page_instance.require_valid_email,
                 '_tok': csrf.token_id()})
 
     @RequireInstance
@@ -488,7 +492,8 @@ class InstanceController(BaseController):
         require.instance.edit(c.page_instance)
 
         updated = update_attributes(c.page_instance, self.form_result,
-                                    ['description', 'label', 'hidden'])
+                                    ['description', 'label', 'hidden',
+                                     'require_valid_email'])
         if h.has_permission('global.admin'):
             auth_updated = update_attributes(c.page_instance, self.form_result,
                                              ['is_authenticated'])
@@ -796,11 +801,14 @@ class InstanceController(BaseController):
         event.emit(event.T_INSTANCE_JOIN, c.user,
                    instance=c.page_instance)
 
+        path = request.params.get('came_from', None)
+
         return ret_success(entity=c.page_instance, format=format,
                            message=_("Welcome to %(instance)s") % {
                                'instance': c.page_instance.label
                            },
-                           category='success')
+                           category='success',
+                           force_path=path)
 
     def ask_leave(self, id):
         c.page_instance = self._get_current_instance(id)
